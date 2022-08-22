@@ -1,10 +1,14 @@
-﻿namespace ProjectCheddarServer;
+﻿using ProjectCheddarServer.Constants;
+
+namespace ProjectCheddarServer;
 
 public class Program
 {
     static void Main(string[] args)
     {
         Console.WriteLine("Starting server...");
-        Console.Read();
+
+        Server server = new(NetworkConstants.MAX_PLAYERS, NetworkConstants.PORT);
+        server.Start();
     }
 }
