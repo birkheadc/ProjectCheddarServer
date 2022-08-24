@@ -1,18 +1,18 @@
 using ProjectCheddarServer.Constants;
+using ProjectCheddarServer.Vectors;
 
 namespace ProjectCheddarServer.Game;
 
 public class Chunk
 {
-    private HeightMap map;
-    private ChunkPosition position;
+    private byte[,] heightMap;
+    private Vector2Int position;
     private int size;
 
     public Chunk(int xPos, int zPos)
     {
         size = GameConstants.CHUNK_SIZE;
-        map = new(size);
+        heightMap = new byte[size, size];
         position = new(xPos, zPos);
     }
-    
 }
