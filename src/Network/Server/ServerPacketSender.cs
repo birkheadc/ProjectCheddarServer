@@ -1,3 +1,6 @@
+using ProjectCheddarServer.Game;
+using ProjectCheddarServer.Network;
+
 namespace ProjectCheddarServer;
 
 public class ServerPacketSender
@@ -7,20 +10,17 @@ public class ServerPacketSender
     {
         this.server = server;
     }
-    public void Welcome(Guid clientId, string msg)
-    {
-        using (Packet packet = new((int)ServerPackets.welcome))
-        {
-            packet.Write(msg);
-            packet.Write(clientId.ToString());
-
-            SendTCPData(clientId, packet);
-        }
-    }
 
     private void SendTCPData(Guid clientId, Packet packet)
     {
         packet.WriteLength();
         server.SendDataToClient(clientId, packet);
+    }
+    public void SendWelcome(Guid clientId, string msg)
+    {
+        using (Packet packet = PacketBuilder.CreateWelcomePacket(clientId, msg))
+        {
+            SendTCPData(clientId, packet);
+        }
     }
 }

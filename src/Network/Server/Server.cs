@@ -12,8 +12,8 @@ public class Server
     public int Port { get; private set; }
     public Dictionary<Guid, Client> Clients = new();
     private TcpListener tcpListener;
-    private ServerPacketSender serverSend;
-    private ServerPacketHandler serverHandle;
+    private ServerPacketSender packetSender;
+    private ServerPacketHandler packetHandler;
     private ThreadManager threadManager;
     private GameLogic gameLogic;
     public delegate void PacketHandler(Guid clientId, Packet packet);
@@ -26,8 +26,8 @@ public class Server
 
         tcpListener = new TcpListener(IPAddress.Any, Port);
 
-        serverSend = new(this);
-        serverHandle = new(this);
+        packetSender = new(this);
+        packetHandler = new(this);
         threadManager = new();
         gameLogic = new(threadManager);
 
@@ -76,7 +76,7 @@ public class Server
         Guid id = Guid.NewGuid();
         Clients.Add(id, new Client(id, this));
         Clients[id].Tcp.Connect(client);
-        serverSend.Welcome(id, "Welcome to Project Cheddar!");
+        packetSender.SendWelcome(id, "Welcome to Project Cheddar!");
         Console.WriteLine("Client connected. Id:{0}", id);
     }
     
@@ -94,7 +94,7 @@ public class Server
     {
         PacketHandlers = new()
         {
-            { (int)ClientPackets.welcomeReceived, serverHandle.welcomeReceived }
+            { (int)ClientPackets.WelcomeReceived, packetHandler.WelcomeReceived }
         };
         Console.WriteLine("Server Data Initialized.");
     }
