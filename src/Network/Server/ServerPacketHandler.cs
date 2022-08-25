@@ -1,3 +1,4 @@
+using ProjectCheddarServer.Game;
 using ProjectCheddarServer.Vectors;
 
 namespace ProjectCheddarServer;
@@ -5,10 +6,12 @@ namespace ProjectCheddarServer;
 public class ServerPacketHandler
 {
     private readonly Server server;
+    private readonly GameLogic gameLogic;
 
-    public ServerPacketHandler(Server server)
+    public ServerPacketHandler(Server server, GameLogic gameLogic)
     {
         this.server = server;
+        this.gameLogic = gameLogic;
     }
 
     public void WelcomeReceived(Guid clientId, Packet packet)
@@ -22,16 +25,14 @@ public class ServerPacketHandler
     {
         Vector2Int last = packet.ReadVector2Int();
         Vector2Int curr = packet.ReadVector2Int();
-
-        Console.WriteLine("Player {0} has moved from {1} to {2}", clientId, last.ToString(), curr.ToString());
+        gameLogic.PlayerMove(clientId, last, curr);
         // Todo: Actually move the player; send it data from the new chunks that will be in its new radius, and register it to receive updates on those chunks.
     }
 
     public void PlayerSpawn(Guid clientId, Packet packet)
     {
         Vector2Int curr = packet.ReadVector2Int();
-
-        Console.WriteLine("Player {0} has spawned in chunk {1}", clientId, curr.ToString());
+        gameLogic.PlayerSpawn(clientId, curr);
         // Todo: Actually spawn the player; send it data from all the chunks in its radius, and register it to receive updates on those chunks.
     }
 }

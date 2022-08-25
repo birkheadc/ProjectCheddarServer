@@ -1,6 +1,7 @@
 using System.Net.Sockets;
 using System.Net;
 using ProjectCheddarServer.Constants;
+using ProjectCheddarServer.Game;
 
 namespace ProjectCheddarServer;
 
@@ -26,10 +27,12 @@ public class Server
 
         tcpListener = new TcpListener(IPAddress.Any, Port);
 
-        packetSender = new(this);
-        packetHandler = new(this);
         threadManager = new();
         gameLogic = new(threadManager);
+
+        packetSender = new(this);
+        packetHandler = new(this, gameLogic);
+        
 
         mainThread = new(new ThreadStart(MainThread));
 
