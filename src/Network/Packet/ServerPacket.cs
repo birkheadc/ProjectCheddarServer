@@ -1,6 +1,6 @@
 namespace ProjectCheddarServer;
 /// <summary>Sent from server to client.</summary>
-public enum ServerPackets
+public enum ServerPacket
 {
     Welcome = 1
 }

@@ -16,8 +16,8 @@ public class Server
     private ServerPacketHandler packetHandler;
     private ThreadManager threadManager;
     private GameLogic gameLogic;
-    public delegate void PacketHandler(Guid clientId, Packet packet);
-    public Dictionary<int, PacketHandler> PacketHandlers;
+    public delegate void PacketHandleDelegate(Guid clientId, Packet packet);
+    public Dictionary<ClientPacket, PacketHandleDelegate> PacketHandleDelegates;
 
     public Server(int maxPlayers, int port)
     {
@@ -92,9 +92,17 @@ public class Server
 
     private void InitializeServerData()
     {
-        PacketHandlers = new()
+        PacketHandleDelegates = new()
         {
-            { (int)ClientPackets.WelcomeReceived, packetHandler.WelcomeReceived }
+            {
+                ClientPacket.WelcomeReceived, packetHandler.WelcomeReceived
+            },
+            {
+                ClientPacket.UpdatePlayerChunk, packetHandler.UpdatePlayerChunk
+            },
+            {
+                ClientPacket.PlayerSpawn, packetHandler.PlayerSpawn
+            }
         };
         Console.WriteLine("Server Data Initialized.");
     }

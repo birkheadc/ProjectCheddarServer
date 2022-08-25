@@ -18,4 +18,9 @@ public class Vector2Int
         this.x = x;
         this.y = y;
     }
+    
+    public override string ToString()
+    {
+        return "Vector2Int: (" + x + ", " + y + ")";
+    }
 }

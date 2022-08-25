@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ProjectCheddarServer.Vectors;
 
 public class Packet : IDisposable
 {
@@ -231,6 +232,15 @@ public class Packet : IDisposable
         {
             throw new Exception("Could not read value of type 'int'!");
         }
+    }
+
+    public Vector2Int ReadVector2Int(bool _moveReadPos = true)
+    {
+        int x = ReadInt();
+        int y = ReadInt();
+
+        Vector2Int v2 = new() { X = x, Y = y };
+        return v2;
     }
 
     /// <summary>Reads a long from the packet.</summary>

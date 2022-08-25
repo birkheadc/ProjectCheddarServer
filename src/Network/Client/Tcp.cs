@@ -88,8 +88,7 @@ public class Tcp
                 using (Packet packet = new(packetBytes))
                 {
                     int packetId = packet.ReadInt();
-                    server.PacketHandlers[packetId](id, packet);
-                    // client.ClientHandle.Welcome(packet);
+                    server.PacketHandleDelegates[(ClientPacket)packetId](id, packet);
                 }
             });
 
